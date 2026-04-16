@@ -10,6 +10,7 @@ import CoursePage from "./pages/CoursePage";
 import AdminPage from "./pages/AdminPage";
 import BecomeInstructorPage from "./pages/BecomeInstructorPage";
 import CreateCoursePage from "./pages/CreateCoursePage";
+import InstructorDashboard from "./pages/InstructorDashboard";
 
 export default function App() {
   return (
@@ -43,6 +44,9 @@ export default function App() {
 } />
 <Route path="/create-course" element={
   <ProtectedRoute><CreateCoursePage /></ProtectedRoute>
+} />
+<Route path="/instructor" element={
+  <ProtectedRoute><InstructorDashboard /></ProtectedRoute>
 } />
       </Routes>
       

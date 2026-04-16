@@ -56,6 +56,9 @@ export default function ExamsPage() {
 <button onClick={() => navigate("/become-instructor")} style={s.navBtn}>
   🎓 Devenir formateur
 </button>
+<button onClick={() => navigate("/instructor")} style={s.navBtn}>
+  🎓 Mon espace
+</button>
           <button onClick={() => navigate("/history")} style={s.navBtn}>📊 Historique</button>
         </div>
         <div style={s.navRight}>
