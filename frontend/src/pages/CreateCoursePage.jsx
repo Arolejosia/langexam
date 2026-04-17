@@ -47,7 +47,7 @@ export default function CreateCoursePage() {
       return;
     }
     try {
-      await axios.post("http://localhost:5000/courses",
+      await axios.post("import.meta.env.VITE_API_URL/courses",
         { ...form, price: form.is_free ? 0 : parseFloat(form.price) || 0, lessons },
         { headers: { Authorization: `Bearer ${token}` } }
       );

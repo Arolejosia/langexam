@@ -17,14 +17,14 @@ export default function QuestionsPage() {
   const timerRef = useRef(null);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/exams").then(res => {
+    axios.get(`${import.meta.env.VITE_API_URL}/exams`).then(res => {
       const exam = res.data.find(e => e.id === parseInt(examId));
       if (exam) { setExamTitle(exam.title); setTimeLeft((exam.duration_minutes || 30) * 60); }
     });
   }, [examId]);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/questions/${examId}`)
+    axios.get(`import.meta.env.VITE_API_URL/questions/${examId}`)
       .then(res => setQuestions(res.data))
       .catch(err => console.error(err));
   }, [examId]);
@@ -53,7 +53,7 @@ export default function QuestionsPage() {
     clearTimeout(timerRef.current);
     try {
       const res = await axios.post(
-        "http://localhost:5000/submit",
+        "import.meta.env.VITE_API_URL/submit",
         { exam_id: examId, answers },
         { headers: { Authorization: `Bearer ${token}` } }
       );

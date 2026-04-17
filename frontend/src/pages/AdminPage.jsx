@@ -16,52 +16,52 @@ export default function AdminPage() {
   const headers = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
-    axios.get("http://localhost:5000/admin/stats", { headers })
+    axios.get("import.meta.env.VITE_API_URL/admin/stats", { headers })
       .then(res => setStats(res.data)).catch(() => navigate("/exams"));
   }, []);
 
   useEffect(() => {
     if (tab === "users")
-      axios.get("http://localhost:5000/admin/users", { headers })
+      axios.get("import.meta.env.VITE_API_URL/admin/users", { headers })
         .then(res => setUsers(res.data));
     if (tab === "courses")
-      axios.get("http://localhost:5000/admin/courses", { headers })
+      axios.get("import.meta.env.VITE_API_URL/admin/courses", { headers })
         .then(res => setCourses(res.data));
     if (tab === "exams")
-      axios.get("http://localhost:5000/admin/exams", { headers })
+      axios.get("import.meta.env.VITE_API_URL/admin/exams", { headers })
         .then(res => setExams(res.data));
     if (tab === "pending")
-      axios.get("http://localhost:5000/admin/instructors/pending", { headers })
+      axios.get("import.meta.env.VITE_API_URL/admin/instructors/pending", { headers })
         .then(res => setPending(res.data));
   }, [tab]);
 
   const toggleCourse = async (id) => {
-    await axios.patch(`http://localhost:5000/admin/courses/${id}/toggle`, {}, { headers });
-    axios.get("http://localhost:5000/admin/courses", { headers })
+    await axios.patch(`import.meta.env.VITE_API_URL/admin/courses/${id}/toggle`, {}, { headers });
+    axios.get("import.meta.env.VITE_API_URL/admin/courses", { headers })
       .then(res => setCourses(res.data));
   };
 
   const deleteCourse = async (id) => {
     if (!confirm("Supprimer ce cours ?")) return;
-    await axios.delete(`http://localhost:5000/admin/courses/${id}`, { headers });
+    await axios.delete(`import.meta.env.VITE_API_URL/admin/courses/${id}`, { headers });
     setCourses(prev => prev.filter(c => c.id !== id));
   };
 
   const deleteExam = async (id) => {
     if (!confirm("Supprimer cet examen ?")) return;
-    await axios.delete(`http://localhost:5000/admin/exams/${id}`, { headers });
+    await axios.delete(`import.meta.env.VITE_API_URL/admin/exams/${id}`, { headers });
     setExams(prev => prev.filter(e => e.id !== id));
   };
 
   const approveInstructor = async (id) => {
-    await axios.patch(`http://localhost:5000/admin/instructors/${id}/approve`, {}, { headers });
+    await axios.patch(`import.meta.env.VITE_API_URL/admin/instructors/${id}/approve`, {}, { headers });
     setPending(prev => prev.filter(i => i.id !== id));
     setStats(prev => ({ ...prev, pending: prev.pending - 1, instructors: prev.instructors + 1 }));
   };
 
   const rejectInstructor = async (id) => {
     if (!confirm("Refuser cette demande ?")) return;
-    await axios.delete(`http://localhost:5000/admin/instructors/${id}`, { headers });
+    await axios.delete(`import.meta.env.VITE_API_URL/admin/instructors/${id}`, { headers });
     setPending(prev => prev.filter(i => i.id !== id));
     setStats(prev => ({ ...prev, pending: prev.pending - 1 }));
   };

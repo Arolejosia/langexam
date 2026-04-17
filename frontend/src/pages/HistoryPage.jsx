@@ -10,7 +10,7 @@ export default function HistoryPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:5000/history", {
+    axios.get("import.meta.env.VITE_API_URL/history", {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => { setHistory(res.data); setLoading(false); })

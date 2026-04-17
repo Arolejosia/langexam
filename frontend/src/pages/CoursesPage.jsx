@@ -12,14 +12,14 @@ export default function CoursesPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:5000/courses")
+    axios.get("import.meta.env.VITE_API_URL/courses")
       .then(res => {
         setCourses(res.data);
         res.data.forEach(course => {
-          axios.get(`http://localhost:5000/ratings/${course.id}`)
+          axios.get(`import.meta.env.VITE_API_URL/ratings/${course.id}`)
             .then(r => setRatings(prev => ({ ...prev, [course.id]: r.data })))
             .catch(() => {});
-          axios.get(`http://localhost:5000/courses/${course.id}/enrollcount`)
+          axios.get(`import.meta.env.VITE_API_URL/courses/${course.id}/enrollcount`)
             .then(r => setEnrollCounts(prev => ({ ...prev, [course.id]: r.data.count })))
             .catch(() => {});
         });

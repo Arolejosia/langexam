@@ -10,10 +10,10 @@ export default function ExamsPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:5000/exams")
+    axios.get(`${import.meta.env.VITE_API_URL}/exams`)
       .then(res => setExams(res.data))
       .catch(err => console.error(err));
-    axios.get("http://localhost:5000/courses")
+    axios.get("import.meta.env.VITE_API_URL/courses")
       .then(res => setCourses(res.data))
       .catch(err => console.error(err));
   }, []);

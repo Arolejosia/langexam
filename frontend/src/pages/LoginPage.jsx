@@ -17,7 +17,7 @@ export default function LoginPage() {
     try {
       const endpoint = isLogin ? "/auth/login" : "/auth/signup";
       const payload = isLogin ? { email, password } : { email, password, name };
-      const res = await axios.post(`http://localhost:5000${endpoint}`, payload);
+      const res = await axios.post(`import.meta.env.VITE_API_URL${endpoint}`, payload);
       login(res.data.user, res.data.token);
       navigate("/exams");
     } catch (err) {

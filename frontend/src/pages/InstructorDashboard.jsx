@@ -15,9 +15,9 @@ export default function InstructorDashboard() {
 
   useEffect(() => {
     Promise.all([
-      axios.get("http://localhost:5000/instructors/me", { headers }),
-      axios.get("http://localhost:5000/instructors/my-stats", { headers }),
-      axios.get("http://localhost:5000/instructors/my-courses", { headers })
+      axios.get("import.meta.env.VITE_API_URL/instructors/me", { headers }),
+      axios.get("import.meta.env.VITE_API_URL/instructors/my-stats", { headers }),
+      axios.get("import.meta.env.VITE_API_URL/instructors/my-courses", { headers })
     ])
       .then(([, statsRes, coursesRes]) => {
         setStats(statsRes.data);
