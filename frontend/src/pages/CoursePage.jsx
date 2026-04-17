@@ -34,23 +34,23 @@ export default function CoursePage() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    axios.get(`import.meta.env.VITE_API_URL/courses/${courseId}`)
+    axios.get(`${import.meta.env.VITE_API_URL}/courses/${courseId}`)
       .then(res => {
         setCourse(res.data);
         if (res.data.lessons?.length > 0)
           setActiveLesson(res.data.lessons[0]);
       });
 
-    axios.post(`import.meta.env.VITE_API_URL/courses/${courseId}/view`).catch(() => {});
+    axios.post(`${import.meta.env.VITE_API_URL}/courses/${courseId}/view`).catch(() => {});
 
-    axios.get(`import.meta.env.VITE_API_URL/ratings/${courseId}`)
+    axios.get(`${import.meta.env.VITE_API_URL}/ratings/${courseId}`)
       .then(res => setRatingsData(res.data)).catch(() => {});
 
-    axios.get(`import.meta.env.VITE_API_URL/courses/${courseId}/enrollcount`)
+    axios.get(`${import.meta.env.VITE_API_URL}/courses/${courseId}/enrollcount`)
       .then(res => setEnrollCount(res.data.count)).catch(() => {});
 
     if (token) {
-      axios.get(`import.meta.env.VITE_API_URL/ratings/${courseId}/mine`, {
+      axios.get(`${import.meta.env.VITE_API_URL}/ratings/${courseId}/mine`, {
         headers: { Authorization: `Bearer ${token}` }
       }).then(res => {
         if (res.data) {
@@ -73,11 +73,11 @@ export default function CoursePage() {
   const submitRating = async () => {
     if (!myRating) return;
     try {
-      await axios.post(`import.meta.env.VITE_API_URL/ratings/${courseId}`,
+      await axios.post(`${import.meta.env.VITE_API_URL}/ratings/${courseId}`,
         { rating: myRating, comment: myComment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      const res = await axios.get(`import.meta.env.VITE_API_URL/ratings/${courseId}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/ratings/${courseId}`);
       setRatingsData(res.data);
       setSubmitted(true);
     } catch (err) { console.error(err); }

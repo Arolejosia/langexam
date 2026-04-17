@@ -13,7 +13,7 @@ export default function BecomeInstructorPage() {
   const handleSubmit = async () => {
     if (!bio.trim()) { setError("Décris-toi en quelques mots."); return; }
     try {
-      await axios.post("import.meta.env.VITE_API_URL/instructors/apply",
+      await axios.post("${import.meta.env.VITE_API_URL}/instructors/apply",
         { bio },
         { headers: { Authorization: `Bearer ${token}` } }
       );
