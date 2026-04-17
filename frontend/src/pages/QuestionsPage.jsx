@@ -17,7 +17,7 @@ export default function QuestionsPage() {
   const timerRef = useRef(null);
 
   useEffect(() => {
-    axios.get(`${${import.meta.env.VITE_API_URL}}/exams`).then(res => {
+    axios.get(`${import.meta.env.VITE_API_URL}/exams`).then(res => {
       const exam = res.data.find(e => e.id === parseInt(examId));
       if (exam) { setExamTitle(exam.title); setTimeLeft((exam.duration_minutes || 30) * 60); }
     });
