@@ -12,7 +12,7 @@ export default function CoursesPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("${import.meta.env.VITE_API_URL}/courses")
+    axios.get(`${import.meta.env.VITE_API_URL}/courses`)
       .then(res => {
         setCourses(res.data);
         res.data.forEach(course => {
