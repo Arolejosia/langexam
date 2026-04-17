@@ -174,5 +174,72 @@ router.delete("/exams/:id", requireAuth, requireAdmin, async (req, res) => {
     res.status(500).json({ error: "Erreur serveur" });
   }
 });
+// Créer un examen
+router.post("/exams", requireAuth, requireAdmin, async (req, res) => {
+  const { title, exam_type, level, duration_minutes } = req.body;
+  try {
+    const result = await pool.query(
+      "INSERT INTO exams (title, exam_type, level, duration_minutes) VALUES ($1, $2, $3, $4) RETURNING *",
+      [title, exam_type, level || null, duration_minutes || 30]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+// Ajouter une question + choix
+router.post("/exams/:examId/questions", requireAuth, requireAdmin, async (req, res) => {
+  const { question, content, type, choices } = req.body;
+  try {
+    const q = await pool.query(
+      "INSERT INTO questions (exam_id, question, content, type) VALUES ($1, $2, $3, $4) RETURNING id",
+      [req.params.examId, question, content || "", type || "reading"]
+    );
+    const questionId = q.rows[0].id;
+
+    for (const choice of choices) {
+      await pool.query(
+        "INSERT INTO choices (question_id, text, is_correct) VALUES ($1, $2, $3)",
+        [questionId, choice.text, choice.is_correct]
+      );
+    }
+    res.json({ success: true, question_id: questionId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+// Supprimer une question
+router.delete("/questions/:id", requireAuth, requireAdmin, async (req, res) => {
+  try {
+    await pool.query("DELETE FROM choices WHERE question_id = $1", [req.params.id]);
+    await pool.query("DELETE FROM answers WHERE question_id = $1", [req.params.id]);
+    await pool.query("DELETE FROM questions WHERE id = $1", [req.params.id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+// Questions d'un examen
+router.get("/exams/:examId/questions", requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT q.*, 
+        JSON_AGG(JSON_BUILD_OBJECT('id', c.id, 'text', c.text, 'is_correct', c.is_correct)) AS choices
+      FROM questions q
+      JOIN choices c ON c.question_id = q.id
+      WHERE q.exam_id = $1
+      GROUP BY q.id
+      ORDER BY q.id ASC
+    `, [req.params.examId]);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
 
 export default router;
